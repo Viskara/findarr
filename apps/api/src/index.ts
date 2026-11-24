@@ -19,6 +19,8 @@ import libPlugin from './lib/plugin.js';
 import loggerPlugin from './logging/plugin.js';
 import { adminLogsRoutes } from './logging/routes.js';
 import { createLogStore } from './logging/service.js';
+import mdblistPlugin from './mdblist/plugin.js';
+import { mdblistRoutes } from './mdblist/routes.js';
 import mediaPlugin from './media/plugin.js';
 import preferencesPlugin from './preferences/plugin.js';
 import { rebuildUserPreferences } from './preferences/rebuild.js';
@@ -81,6 +83,7 @@ async function start() {
     await server.register(libPlugin);
     await server.register(arrPlugin);
     await server.register(catalogPlugin);
+    await server.register(mdblistPlugin);
     await server.register(interactionPlugin);
     await server.register(schedulerPlugin);
     await server.register(versionPlugin);
@@ -96,6 +99,7 @@ async function start() {
     await server.register(settingsRoutes, { prefix: '/api/settings' });
     await server.register(preferencesRoutes, { prefix: '/api/preferences' });
     await server.register(catalogRoutes, { prefix: '/api' });
+    await server.register(mdblistRoutes, { prefix: '/api' });
     await server.register(schedulerRoutes, { prefix: '/api' });
     await server.register(adminSchedulerRoutes, { prefix: '/api/admin' });
     await server.register(adminLogsRoutes, { prefix: '/api/admin' });

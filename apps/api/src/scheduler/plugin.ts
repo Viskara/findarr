@@ -30,5 +30,5 @@ const schedulerPlugin = (fastify: FastifyInstance) => {
 
 export default fp(schedulerPlugin, {
   name: 'scheduler',
-  dependencies: ['arr', 'lib', 'catalog', 'logger'],
+  dependencies: ['arr', 'lib', 'catalog', 'mdblist', 'logger'],
 });

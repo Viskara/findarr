@@ -10,6 +10,7 @@ import {
   createCatalogKeywordEnrichmentScheduler,
 } from '../catalog/schedulers.js';
 import { createLibrarySyncScheduler, createLibraryQueueSyncScheduler } from '../lib/schedulers.js';
+import { createMdblistSyncScheduler } from '../mdblist/schedulers.js';
 import type { Scheduler } from './types.js';
 
 export function createSchedulers(fastify: FastifyInstance) {
@@ -26,5 +27,6 @@ export function createSchedulers(fastify: FastifyInstance) {
     sonarrQueueFastSync: createArrQueueFastSyncScheduler(fastify.sonarr),
     catalogCacheSync: createCatalogCacheSyncScheduler(),
     catalogKeywordEnrichment: createCatalogKeywordEnrichmentScheduler(),
+    mdblistSync: createMdblistSyncScheduler(),
   } as const satisfies Record<string, Scheduler>;
 }

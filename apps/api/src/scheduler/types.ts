@@ -2,6 +2,7 @@ import type { SchedulerConfig, SchedulerState } from '@findarr/shared/scheduler'
 
 import type { Database } from '../db/service.js';
 import type { LibService } from '../lib/service.js';
+import type { MdblistService } from '../mdblist/service.js';
 import type { TMDBService } from '../tmdb/service.js';
 import type { AppLogger } from '../utils/logger.js';
 import type { SchedulerService } from './service.js';
@@ -12,6 +13,7 @@ export interface SchedulerContext {
   tmdb: TMDBService;
   jellyfin: LibService;
   plex: LibService;
+  mdblist: MdblistService;
   scheduler: SchedulerService;
 }
 

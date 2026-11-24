@@ -35,7 +35,8 @@
     "more": "Mehr",
     "account": "Konto",
     "logout": "Abmelden",
-    "loggedInAs": "Angemeldet als"
+    "loggedInAs": "Angemeldet als",
+    "lists": "Listen"
   },
   "login": {
     "badge": "Findarr",
@@ -104,7 +105,28 @@
     "globalSettingsDescription": "App-weite Verhaltensweisen anpassen, die Abstimmungen und zukünftige Admin-Optionen beeinflussen.",
     "voteThreshold": "Anforderungs-Schwelle",
     "votes": "Stimme(n)",
-    "voteThresholdDescription": "Ein Film oder eine Serie wird automatisch angefordert, sobald diese Anzahl an Upvotes erreicht ist. Admin-Votes umgehen diese Schwelle immer und lösen die Anforderung direkt aus."
+    "voteThresholdDescription": "Ein Film oder eine Serie wird automatisch angefordert, sobald diese Anzahl an Upvotes erreicht ist. Admin-Votes umgehen diese Schwelle immer und lösen die Anforderung direkt aus.",
+    "mdblist": {
+      "title": "MDBList",
+      "description": "Füge URLs öffentlicher MDBList-Listen hinzu. Sie werden alle 6 Stunden synchronisiert und unter Listen angezeigt.",
+      "urlLabel": "Listen-URL",
+      "urlPlaceholder": "https://mdblist.com/lists/benutzername/listenname",
+      "nameLabel": "Anzeigename (optional)",
+      "add": "Liste hinzufügen",
+      "adding": "Wird hinzugefügt…",
+      "added": "Liste hinzugefügt.",
+      "sync": "Jetzt synchronisieren",
+      "syncing": "Synchronisiere…",
+      "synced": "{{synced}} Liste(n) synchronisiert.",
+      "syncedWithFailures": "{{synced}} Liste(n) synchronisiert, {{failed}} fehlgeschlagen.",
+      "remove": "Entfernen",
+      "removed": "Liste entfernt.",
+      "noLists": "Noch keine Listen hinzugefügt.",
+      "titles": "{{count}} Titel",
+      "lastSynced": "Zuletzt synchronisiert: {{date}}",
+      "neverSynced": "Noch nicht synchronisiert",
+      "addError": "Die Liste konnte nicht hinzugefügt werden. Prüfe die URL und ob die Liste öffentlich ist."
+    }
   },
   "vote": {
     "tryAgain": "Erneut versuchen",
@@ -411,5 +433,15 @@
     "positiveEvidence": "{{positive}} von {{total}} positiv bewertet",
     "mixedEvidence": "{{positive}} positiv · {{negative}} negativ",
     "negativeEvidence": "{{negative}} von {{total}} negativ bewertet"
+  },
+  "lists": {
+    "title": "Listen",
+    "description": "Durchsuche Listen, die von MDBList synchronisiert wurden.",
+    "itemCount": "{{count}} Titel",
+    "emptyTitle": "Noch keine Listen",
+    "emptyMessage": "Bitte einen Admin, in der Verwaltung eine MDBList-URL hinzuzufügen.",
+    "emptyMessageAdmin": "Füge in der Verwaltung eine MDBList-URL hinzu, um zu starten.",
+    "openAdmin": "Verwaltung öffnen",
+    "loadError": "Diese Liste konnte nicht geladen werden."
   }
 }

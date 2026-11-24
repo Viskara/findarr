@@ -52,6 +52,7 @@ export const SchedulerNameSchema = z.enum([
   'sonarrQueueFastSync',
   'catalogCacheSync',
   'catalogKeywordEnrichment',
+  'mdblistSync',
 ] as const);
 
 export const SchedulerParamsSchema = z.object({

@@ -129,6 +129,11 @@ export function Navigation({ onLogout, user, isAdmin }: NavigationProps) {
               <span className="font-medium">{t('nav.explore')}</span>
             </NavLink>
 
+            <NavLink to="/lists" className={navLinkClass}>
+              <Icon name="view_list" />
+              <span className="font-medium">{t('nav.lists')}</span>
+            </NavLink>
+
             <NavLink to={activityLinkTarget} className={navLinkClass}>
               <Icon name="fact_check" />
               <span className="font-medium">{t('nav.activity')}</span>
@@ -206,6 +211,11 @@ export function Navigation({ onLogout, user, isAdmin }: NavigationProps) {
           <NavLink to="/explore" className={mobileNavLinkClass}>
             <Icon className="mb-1" name="explore" size="lg" />
             <span className="text-xs font-medium">{t('nav.explore')}</span>
+          </NavLink>
+
+          <NavLink to="/lists" className={mobileNavLinkClass}>
+            <Icon className="mb-1" name="view_list" size="lg" />
+            <span className="text-xs font-medium">{t('nav.lists')}</span>
           </NavLink>
 
           <NavLink to={activityLinkTarget} className={mobileNavLinkClass}>

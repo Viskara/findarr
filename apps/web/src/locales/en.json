@@ -35,7 +35,8 @@
     "more": "More",
     "account": "Account",
     "logout": "Logout",
-    "loggedInAs": "Logged in as"
+    "loggedInAs": "Logged in as",
+    "lists": "Lists"
   },
   "login": {
     "badge": "Findarr",
@@ -104,7 +105,28 @@
     "globalSettingsDescription": "Tune application-wide behavior that affects voting and future admin controls.",
     "voteThreshold": "Community request threshold",
     "votes": "vote(s)",
-    "voteThresholdDescription": "A movie or show is requested automatically once it reaches this many upvotes. Admin votes always request immediately and override this threshold."
+    "voteThresholdDescription": "A movie or show is requested automatically once it reaches this many upvotes. Admin votes always request immediately and override this threshold.",
+    "mdblist": {
+      "title": "MDBList",
+      "description": "Add public MDBList list URLs. They are synced every 6 hours and appear under Lists.",
+      "urlLabel": "List URL",
+      "urlPlaceholder": "https://mdblist.com/lists/username/list-name",
+      "nameLabel": "Display name (optional)",
+      "add": "Add list",
+      "adding": "Adding…",
+      "added": "List added.",
+      "sync": "Sync now",
+      "syncing": "Syncing…",
+      "synced": "Synced {{synced}} list(s).",
+      "syncedWithFailures": "Synced {{synced}} list(s), {{failed}} failed.",
+      "remove": "Remove",
+      "removed": "List removed.",
+      "noLists": "No lists added yet.",
+      "titles": "{{count}} titles",
+      "lastSynced": "Last synced {{date}}",
+      "neverSynced": "Not synced yet",
+      "addError": "Could not add the list. Check the URL and that the list is public."
+    }
   },
   "vote": {
     "tryAgain": "Try Again",
@@ -411,5 +433,15 @@
     "positiveEvidence": "liked {{positive}} of {{total}}",
     "mixedEvidence": "{{positive}} liked · {{negative}} disliked",
     "negativeEvidence": "disliked {{negative}} of {{total}}"
+  },
+  "lists": {
+    "title": "Lists",
+    "description": "Browse lists synced from MDBList.",
+    "itemCount": "{{count}} titles",
+    "emptyTitle": "No lists yet",
+    "emptyMessage": "Ask an admin to add an MDBList URL in Administration.",
+    "emptyMessageAdmin": "Add an MDBList URL in Administration to get started.",
+    "openAdmin": "Open administration",
+    "loadError": "Could not load this list."
   }
 }

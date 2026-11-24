@@ -15,6 +15,7 @@ export default defineConfig({
       'src/utils.ts',
       'src/env.ts',
       'src/logs.ts',
+      'src/mdblist.ts',
       'src/version.ts',
     ],
     dts: true,

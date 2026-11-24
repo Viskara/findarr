@@ -15,6 +15,7 @@ function lazyPage<M extends Record<string, ComponentType>, K extends keyof M>(
 const DashboardPage = lazyPage(async () => import('./pages/DashboardPage'), 'DashboardPage');
 const VotePage = lazyPage(async () => import('./pages/VotePage'), 'VotePage');
 const ExplorePage = lazyPage(async () => import('./pages/ExplorePage'), 'ExplorePage');
+const ListsPage = lazyPage(async () => import('./pages/ListsPage'), 'ListsPage');
 const MediaDetailPage = lazyPage(async () => import('./pages/MediaDetailPage'), 'MediaDetailPage');
 const ActivityPage = lazyPage(async () => import('./pages/ActivityPage'), 'ActivityPage');
 const SettingsPage = lazyPage(async () => import('./pages/SettingsPage'), 'SettingsPage');
@@ -42,6 +43,7 @@ export function AppRoutes({ isAdmin }: AppRoutesProps) {
   const hasDrilldownBackground =
     backgroundLocation?.pathname === '/' ||
     backgroundLocation?.pathname === '/explore' ||
+    backgroundLocation?.pathname === '/lists' ||
     backgroundLocation?.pathname === '/activity';
 
   return (
@@ -57,6 +59,7 @@ export function AppRoutes({ isAdmin }: AppRoutesProps) {
             <Route path="/" element={<DashboardPage />} />
             <Route path="/vote" element={<VotePage />} />
             <Route path="/explore" element={<ExplorePage />} />
+            <Route path="/lists" element={<ListsPage />} />
             <Route path="/movie/:id" element={<MediaDetailPage />} />
             <Route path="/tv/:id" element={<MediaDetailPage />} />
             <Route path="/activity" element={<ActivityPage />} />

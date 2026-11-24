@@ -32,6 +32,10 @@
       "types": "./dist/preferences.d.mts",
       "import": "./dist/preferences.mjs"
     },
+    "./mdblist": {
+      "types": "./dist/mdblist.d.mts",
+      "import": "./dist/mdblist.mjs"
+    },
     "./scheduler": {
       "types": "./dist/scheduler.d.mts",
       "import": "./dist/scheduler.mjs"

@@ -7,6 +7,7 @@ import type { CatalogService } from '../../catalog/service.js';
 import type { Database } from '../../db/service.js';
 import { libConfig } from '../../lib/config.js';
 import type { LibService } from '../../lib/service.js';
+import type { MdblistService } from '../../mdblist/service.js';
 import type { SchedulerService } from '../../scheduler/service.js';
 import type { SchedulerContext } from '../../scheduler/types.js';
 import type { TMDBService } from '../../tmdb/service.js';
@@ -161,6 +162,19 @@ export function createMockPlexService(
   };
 }
 
+export function createMockMdblistService(
+  overrides: Partial<Mocked<MdblistService>> = {},
+): Mocked<MdblistService> {
+  return {
+    listLists: vi.fn<MdblistService['listLists']>().mockResolvedValue([]),
+    addList: vi.fn<MdblistService['addList']>(),
+    removeList: vi.fn<MdblistService['removeList']>(),
+    syncAll: vi.fn<MdblistService['syncAll']>().mockResolvedValue({ synced: 0, failed: 0 }),
+    getItems: vi.fn<MdblistService['getItems']>(),
+    ...overrides,
+  };
+}
+
 export function createMockSchedulerService(
   overrides: Partial<Mocked<SchedulerService>> = {},
 ): Mocked<SchedulerService> {
@@ -212,6 +226,7 @@ export function createMockSchedulerContext(
     tmdb: createMockTMDBService(),
     jellyfin: createMockJellyfinService(),
     plex: createMockPlexService(),
+    mdblist: createMockMdblistService(),
     scheduler: createMockSchedulerService(),
     ...overrides,
   };

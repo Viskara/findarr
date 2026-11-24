@@ -14,6 +14,7 @@ import type {
 } from '@findarr/shared/catalog';
 import type { InteractionsQuery } from '@findarr/shared/interaction';
 import type { LogLevel, LogLevelResponse, LogsResponse } from '@findarr/shared/logs';
+import type { MdblistAddQuery, MdblistItemsResponse, MdblistList } from '@findarr/shared/mdblist';
 import type {
   SearchResponse,
   DiscoverMediaResponse,
@@ -70,6 +71,36 @@ export const searchService = {
 
   getVotingFeed: async (params: Partial<PopularQuery> = {}): Promise<VoteQueueResponse> => {
     const response = await api.get<VoteQueueResponse>('/queue', { params });
+    return response.data;
+  },
+};
+
+export const mdblistService = {
+  listLists: async (): Promise<MdblistList[]> => {
+    const response = await api.get<MdblistList[]>('/lists');
+    return response.data;
+  },
+
+  getItems: async (id: string, page: number): Promise<MdblistItemsResponse> => {
+    const response = await api.get<MdblistItemsResponse>(`/lists/${id}/items`, {
+      params: { page },
+    });
+    return response.data;
+  },
+};
+
+export const adminMdblistService = {
+  addList: async (query: MdblistAddQuery): Promise<MdblistList> => {
+    const response = await api.post<MdblistList>('/admin/mdblist/lists', query);
+    return response.data;
+  },
+
+  removeList: async (id: string): Promise<void> => {
+    await api.delete(`/admin/mdblist/lists/${id}`);
+  },
+
+  sync: async (): Promise<{ synced: number; failed: number }> => {
+    const response = await api.post<{ synced: number; failed: number }>('/admin/mdblist/sync');
     return response.data;
   },
 };

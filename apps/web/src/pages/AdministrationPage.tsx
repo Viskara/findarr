@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrSection } from '../components/administration/ArrSection';
 import { CommunityVoteThresholdSection } from '../components/administration/CommunityVoteThresholdSection';
 import { LibSection } from '../components/administration/LibSection';
+import { MdblistSection } from '../components/administration/MdblistSection';
 import { TmdbSection } from '../components/administration/TmdbSection';
 import { PageContainer } from '../components/ui/PageContainer';
 import { PageHeader } from '../components/ui/PageHeader';
@@ -26,6 +27,7 @@ export function AdministrationPage() {
         <div className="space-y-4">
           <CommunityVoteThresholdSection />
           <TmdbSection />
+          <MdblistSection />
           <LibSection
             service="jellyfin"
             onEnable={() => {
