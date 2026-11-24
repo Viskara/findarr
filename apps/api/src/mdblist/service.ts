@@ -1,8 +1,10 @@
 import {
   MDBLIST_PAGE_SIZE,
+  MDBLIST_PREVIEW_SIZE,
   type MdblistAddQuery,
   type MdblistItemsResponse,
   type MdblistList,
+  type MdblistPreview,
 } from '@findarr/shared/mdblist';
 import type { Media } from '@findarr/shared/media';
 import { getErrorMessage, isDefined } from '@findarr/shared/utils';
@@ -12,6 +14,7 @@ import type { MediaService } from '../media/service.js';
 import type { SettingsService } from '../settings/service.js';
 import type { TMDBService } from '../tmdb/service.js';
 import type { UserService } from '../user/service.js';
+import { createLruTtlCache } from '../utils/cacheHelper.js';
 import { badRequest, conflict, notFound } from '../utils/errors.js';
 import type { AppLogger } from '../utils/logger.js';
 import {
@@ -50,7 +53,10 @@ function toPublic(list: StoredList): MdblistList {
     id: list.id,
     url: mdblistPublicUrl(list),
     name: list.name,
+    username: list.username,
     itemCount: list.items.length,
+    movieCount: list.items.filter((item) => item.type === 'movie').length,
+    showCount: list.items.filter((item) => item.type === 'tv').length,
     lastSyncedAt: list.lastSyncedAt,
   };
 }
@@ -58,6 +64,8 @@ function toPublic(list: StoredList): MdblistList {
 export function createMdblistService(context: MdblistContext) {
   const { settings, tmdb, user, media } = context;
   const log = context.appLog.scope('mdblist');
+
+  const previewCache = createLruTtlCache<MdblistPreview>(60 * 60 * 1000, 200);
 
   // Serializes read-modify-write cycles on the stored lists blob.
   let queue: Promise<unknown> = Promise.resolve();
@@ -201,7 +209,48 @@ export function createMdblistService(context: MdblistContext) {
     };
   }
 
-  return { listLists, addList, removeList, syncAll, getItems };
+  /**
+   * First few titles of a list for the overview card. Cached because it costs
+   * several TMDB lookups; the key changes whenever the list is re-synced.
+   */
+  async function getPreview(id: string, userId: number): Promise<MdblistPreview> {
+    const lists = await load();
+    const list = lists.find((entry) => entry.id === id);
+    if (!list) {
+      throw notFound('List not found');
+    }
+
+    const { language } = await user.getSettings(userId);
+
+    return previewCache.getOrLoad(`${id}:${list.lastSyncedAt ?? 0}:${language}`, async () => {
+      // Look a little past the preview size so unresolvable titles do not leave gaps.
+      const candidates = list.items.slice(0, MDBLIST_PREVIEW_SIZE + 3);
+      const resolved = await Promise.all(
+        candidates.map(async (item): Promise<Media | undefined> => {
+          try {
+            return await tmdb.details({ id: item.tmdbId, type: item.type, language });
+          } catch (error) {
+            log.debug({ err: error, ...item }, 'Skipping MDBList preview item');
+            return undefined;
+          }
+        }),
+      );
+
+      return {
+        items: resolved
+          .filter((item) => isDefined(item))
+          .slice(0, MDBLIST_PREVIEW_SIZE)
+          .map((item) => ({
+            tmdbId: item.tmdbId,
+            type: item.type,
+            name: item.name,
+            posterPath: item.posterPath ?? null,
+          })),
+      };
+    });
+  }
+
+  return { listLists, addList, removeList, syncAll, getItems, getPreview };
 }
 
 export type MdblistService = ReturnType<typeof createMdblistService>;

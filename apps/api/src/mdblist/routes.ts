@@ -9,6 +9,14 @@ export const mdblistRoutes = (fastify: FastifyInstance) => {
   fastify.get('/lists', async () => fastify.mdblist.listLists());
 
   fastify.get(
+    '/lists/:id/preview',
+    protectedRoute(async (request) => {
+      const { id } = MdblistListParamsSchema.parse(request.params);
+      return fastify.mdblist.getPreview(id, request.user.id);
+    }),
+  );
+
+  fastify.get(
     '/lists/:id/items',
     protectedRoute(async (request) => {
       const { id } = MdblistListParamsSchema.parse(request.params);

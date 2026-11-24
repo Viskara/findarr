@@ -25,9 +25,27 @@ export interface MdblistList {
   id: string;
   url: string;
   name: string;
+  /** MDBList owner, without the leading @. */
+  username: string;
   itemCount: number;
+  movieCount: number;
+  showCount: number;
   lastSyncedAt: number | null;
 }
+
+export interface MdblistPreviewItem {
+  tmdbId: number;
+  type: 'movie' | 'tv';
+  name: string;
+  posterPath: string | null;
+}
+
+/** The first few titles of a list, for the overview card. */
+export interface MdblistPreview {
+  items: MdblistPreviewItem[];
+}
+
+export const MDBLIST_PREVIEW_SIZE = 5;
 
 export interface MdblistItemsResponse {
   results: Media[];

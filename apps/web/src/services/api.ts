@@ -14,7 +14,12 @@ import type {
 } from '@findarr/shared/catalog';
 import type { InteractionsQuery } from '@findarr/shared/interaction';
 import type { LogLevel, LogLevelResponse, LogsResponse } from '@findarr/shared/logs';
-import type { MdblistAddQuery, MdblistItemsResponse, MdblistList } from '@findarr/shared/mdblist';
+import type {
+  MdblistAddQuery,
+  MdblistItemsResponse,
+  MdblistList,
+  MdblistPreview,
+} from '@findarr/shared/mdblist';
 import type {
   SearchResponse,
   DiscoverMediaResponse,
@@ -79,6 +84,11 @@ export const searchService = {
 export const mdblistService = {
   listLists: async (): Promise<MdblistList[]> => {
     const response = await api.get<MdblistList[]>('/lists');
+    return response.data;
+  },
+
+  getPreview: async (id: string): Promise<MdblistPreview> => {
+    const response = await api.get<MdblistPreview>(`/lists/${id}/preview`);
     return response.data;
   },
 

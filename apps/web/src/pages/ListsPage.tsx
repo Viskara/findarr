@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 
+import { ListCard } from '../components/lists/ListCard';
 import { ListsSidebar } from '../components/lists/ListsSidebar';
 import { PaginatedMediaResults } from '../components/media/PaginatedMediaResults';
 import { LoadingState, StateDisplay } from '../components/ui';
+import { Icon } from '../components/ui/Icon';
 import { PageContainer } from '../components/ui/PageContainer';
 import { PageHeader } from '../components/ui/PageHeader';
-import { QuickActionBar } from '../components/ui/QuickActionBar';
 import { useListFeed } from '../hooks/useListFeed';
 import { useMediaNavigation } from '../hooks/useMediaNavigation';
 import { useMediaUpdateSubscription } from '../hooks/useMediaUpdateSubscription';
@@ -19,7 +20,7 @@ export function ListsPage() {
   const { t } = useTranslation();
   const { isAdmin } = useSession();
   const { goToMedia } = useMediaNavigation();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [lists, setLists] = useState<MdblistList[] | null>(null);
 
   useEffect(() => {
@@ -42,7 +43,7 @@ export function ListsPage() {
   }, []);
 
   const requestedId = searchParams.get('list');
-  const selected = lists?.find((list) => list.id === requestedId) ?? lists?.[0];
+  const selected = lists?.find((list) => list.id === requestedId);
 
   const feed = useListFeed(selected?.id);
   useMediaUpdateSubscription(feed.updateItem);
@@ -56,6 +57,16 @@ export function ListsPage() {
       <div className="min-w-0 flex-1">
         <PageContainer>
           <div className="space-y-6 md:space-y-8">
+            {selected && (
+              <Link
+                to="/lists"
+                className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-100 md:hidden"
+              >
+                <Icon name="arrow_back" size="sm" />
+                {t('lists.allLists')}
+              </Link>
+            )}
+
             <PageHeader
               title={selected?.name ?? t('lists.title')}
               description={
@@ -86,40 +97,28 @@ export function ListsPage() {
               />
             )}
 
-            {lists !== null && lists.length > 0 && (
-              <>
-                {/* The sidebar is desktop-only; phones get a chip row instead. */}
-                {lists.length > 1 && (
-                  <div className="md:hidden">
-                    <QuickActionBar
-                      items={lists.map((list) => ({
-                        id: list.id,
-                        label: list.name,
-                        icon: 'view_list',
-                        selected: list.id === selected?.id,
-                        onClick: () => {
-                          setSearchParams({ list: list.id }, { replace: true });
-                        },
-                      }))}
-                    />
-                  </div>
-                )}
-
-                {feed.error && feed.results.length === 0 ? (
-                  <StateDisplay title={t('lists.loadError')} />
-                ) : (
-                  <PaginatedMediaResults
-                    results={feed.results}
-                    loading={feed.loading}
-                    loadingMore={feed.loadingMore}
-                    hasMore={feed.hasMore}
-                    onSelectItem={goToMedia}
-                    onUpdateItem={feed.updateItem}
-                    onLoadMore={feed.loadMore}
-                  />
-                )}
-              </>
+            {lists !== null && lists.length > 0 && !selected && (
+              <div className="grid gap-4 md:gap-5 2xl:grid-cols-2">
+                {lists.map((list) => (
+                  <ListCard key={list.id} list={list} />
+                ))}
+              </div>
             )}
+
+            {selected &&
+              (feed.error && feed.results.length === 0 ? (
+                <StateDisplay title={t('lists.loadError')} />
+              ) : (
+                <PaginatedMediaResults
+                  results={feed.results}
+                  loading={feed.loading}
+                  loadingMore={feed.loadingMore}
+                  hasMore={feed.hasMore}
+                  onSelectItem={goToMedia}
+                  onUpdateItem={feed.updateItem}
+                  onLoadMore={feed.loadMore}
+                />
+              ))}
           </div>
         </PageContainer>
       </div>

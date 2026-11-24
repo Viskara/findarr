@@ -454,6 +454,9 @@
     "emptyMessageAdmin": "Füge in der Verwaltung eine MDBList-URL hinzu, um zu starten.",
     "openAdmin": "Verwaltung öffnen",
     "loadError": "Diese Liste konnte nicht geladen werden.",
-    "sidebarTitle": "Deine Listen"
+    "sidebarTitle": "Deine Listen",
+    "allLists": "Alle Listen",
+    "typeMixed": "Filme & Serien",
+    "previewUnavailable": "Vorschau nicht verfügbar."
   }
 }

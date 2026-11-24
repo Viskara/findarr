@@ -6,6 +6,7 @@ import { Icon } from '../ui/Icon';
 
 interface ListsSidebarProps {
   lists: MdblistList[];
+  /** Undefined while the overview of all lists is showing. */
   selectedId: string | undefined;
 }
 
@@ -26,6 +27,20 @@ export function ListsSidebar({ lists, selectedId }: ListsSidebarProps) {
           {t('lists.sidebarTitle')}
         </div>
         <ul className="space-y-1">
+          <li>
+            <Link
+              to="/lists"
+              replace
+              className={itemClass(selectedId === undefined)}
+              aria-current={selectedId === undefined ? 'page' : undefined}
+            >
+              <Icon name="apps" size="sm" />
+              <span className="min-w-0 flex-1 truncate text-sm font-medium">
+                {t('lists.allLists')}
+              </span>
+              <span className="text-xs text-zinc-500">{lists.length}</span>
+            </Link>
+          </li>
           {lists.map((list) => {
             const isActive = list.id === selectedId;
             return (

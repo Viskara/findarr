@@ -173,6 +173,7 @@ export function createMockMdblistService(
     removeList: vi.fn<MdblistService['removeList']>(),
     syncAll: vi.fn<MdblistService['syncAll']>().mockResolvedValue({ synced: 0, failed: 0 }),
     getItems: vi.fn<MdblistService['getItems']>(),
+    getPreview: vi.fn<MdblistService['getPreview']>(),
     ...overrides,
   };
 }

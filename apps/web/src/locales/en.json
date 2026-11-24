@@ -454,6 +454,9 @@
     "emptyMessageAdmin": "Add an MDBList URL in Administration to get started.",
     "openAdmin": "Open administration",
     "loadError": "Could not load this list.",
-    "sidebarTitle": "Your lists"
+    "sidebarTitle": "Your lists",
+    "allLists": "All lists",
+    "typeMixed": "Movies & Shows",
+    "previewUnavailable": "Preview unavailable."
   }
 }
