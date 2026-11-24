@@ -5,7 +5,7 @@ import { createMockAppLogger, createMockTMDBService } from '../tests/helpers/moc
 import { createTestMovieDetail, createTestUserInDb } from '../tests/helpers/testHelper.js';
 import type { TMDBService } from '../tmdb/service.js';
 import { createUserService } from '../user/service.js';
-import { createMdblistService } from './service.js';
+import { createMdblistService, MAX_LISTS } from './service.js';
 
 const items = [
   { tmdbId: 1, type: 'movie' },
@@ -40,6 +40,7 @@ async function setup(details: TMDBService['details']) {
 
   return {
     tmdb,
+    settings,
     userId: account?.id ?? 0,
     service: createMdblistService({ settings, tmdb, user, media, appLog }),
   };
@@ -84,6 +85,23 @@ describe('mdblist overview data', () => {
     await service.getPreview('list-1', userId);
 
     expect(tmdb.details).toHaveBeenCalledTimes(callsAfterFirst);
+  });
+
+  it('refuses to add lists past the shared limit', async () => {
+    const { service, settings } = await setup(vi.fn());
+    const many = Array.from({ length: MAX_LISTS }, (_, index) => ({
+      id: `l${index}`,
+      username: 'u',
+      slug: `s${index}`,
+      name: `List ${index}`,
+      lastSyncedAt: 1,
+      items: [],
+    }));
+    await settings.set({ mdblistLists: JSON.stringify(many) });
+
+    await expect(
+      service.addList({ url: 'https://mdblist.com/lists/someone/one-more' }),
+    ).rejects.toThrow(/too many lists/iu);
   });
 
   it('rejects previews for unknown lists', async () => {

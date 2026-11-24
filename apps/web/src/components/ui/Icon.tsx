@@ -1,6 +1,7 @@
 import type { CSSProperties, HTMLAttributes } from 'react';
 
 export type IconName =
+  | 'add'
   | 'arrow_back'
   | 'apps'
   | 'bar_chart'

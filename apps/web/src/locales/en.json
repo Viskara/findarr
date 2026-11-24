@@ -455,13 +455,20 @@
     "description": "Browse lists synced from MDBList.",
     "itemCount": "{{count}} titles",
     "emptyTitle": "No lists yet",
-    "emptyMessage": "Ask an admin to add an MDBList URL in Administration.",
-    "emptyMessageAdmin": "Add an MDBList URL in Administration to get started.",
-    "openAdmin": "Open administration",
+    "emptyMessage": "Add an MDBList link to get started.",
     "loadError": "Could not load this list.",
     "sidebarTitle": "Your lists",
     "allLists": "All lists",
     "typeMixed": "Movies & Shows",
-    "previewUnavailable": "Preview unavailable."
+    "previewUnavailable": "Preview unavailable.",
+    "add": {
+      "button": "Add list",
+      "title": "Add lists",
+      "description": "Paste MDBList links. Lists are shared with everyone.",
+      "label": "MDBList links",
+      "placeholder": "https://mdblist.com/lists/username/list-name",
+      "submit": "Add {{count}} list(s)",
+      "adding": "Adding…"
+    }
   }
 }

@@ -26,6 +26,7 @@ import {
 } from './client.js';
 
 const SETTINGS_KEY = 'mdblistLists';
+export const MAX_LISTS = 50;
 
 const StoredListSchema = z.object({
   id: z.string(),
@@ -101,6 +102,9 @@ export function createMdblistService(context: MdblistContext) {
 
     return exclusive(async () => {
       const lists = await load();
+      if (lists.length >= MAX_LISTS) {
+        throw badRequest(`Too many lists (limit ${MAX_LISTS}). Remove one first.`);
+      }
       const exists = lists.some(
         (list) =>
           list.username.toLowerCase() === ref.username.toLowerCase() &&

@@ -1,26 +1,27 @@
 import type { MdblistList } from '@findarr/shared/mdblist';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 
+import { AddListModal } from '../components/lists/AddListModal';
 import { ListCard } from '../components/lists/ListCard';
 import { ListsSidebar } from '../components/lists/ListsSidebar';
 import { PaginatedMediaResults } from '../components/media/PaginatedMediaResults';
 import { LoadingState, StateDisplay } from '../components/ui';
+import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
 import { PageContainer } from '../components/ui/PageContainer';
 import { PageHeader } from '../components/ui/PageHeader';
 import { useListFeed } from '../hooks/useListFeed';
 import { useMediaNavigation } from '../hooks/useMediaNavigation';
 import { useMediaUpdateSubscription } from '../hooks/useMediaUpdateSubscription';
-import { useSession } from '../hooks/useSession';
 import { mdblistService } from '../services/api';
 
 export function ListsPage() {
   const { t } = useTranslation();
-  const { isAdmin } = useSession();
   const { goToMedia } = useMediaNavigation();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isAddOpen, setIsAddOpen] = useState(false);
   const [lists, setLists] = useState<MdblistList[] | null>(null);
 
   useEffect(() => {
@@ -41,6 +42,22 @@ export function ListsPage() {
       cancelled = true;
     };
   }, []);
+
+  const closeAdd = useCallback(() => {
+    setIsAddOpen(false);
+  }, []);
+
+  const handleAdded = useCallback(
+    (added: MdblistList[]) => {
+      setLists((current) => [...(current ?? []), ...added]);
+      // A single new list is the one the user wants to look at.
+      const [only] = added;
+      if (only !== undefined && added.length === 1) {
+        setSearchParams({ list: only.id });
+      }
+    },
+    [setSearchParams],
+  );
 
   const requestedId = searchParams.get('list');
   const selected = lists?.find((list) => list.id === requestedId);
@@ -74,6 +91,17 @@ export function ListsPage() {
                   ? t('lists.itemCount', { count: selected.itemCount })
                   : t('lists.description')
               }
+              action={
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setIsAddOpen(true);
+                  }}
+                >
+                  <Icon name="add" size="sm" />
+                  {t('lists.add.button')}
+                </Button>
+              }
             />
 
             {lists === null && (
@@ -81,20 +109,7 @@ export function ListsPage() {
             )}
 
             {lists?.length === 0 && (
-              <StateDisplay
-                title={t('lists.emptyTitle')}
-                message={isAdmin ? t('lists.emptyMessageAdmin') : t('lists.emptyMessage')}
-                action={
-                  isAdmin ? (
-                    <Link
-                      to="/admin/administration"
-                      className="text-sm font-medium text-amber-300 hover:text-amber-200"
-                    >
-                      {t('lists.openAdmin')}
-                    </Link>
-                  ) : undefined
-                }
-              />
+              <StateDisplay title={t('lists.emptyTitle')} message={t('lists.emptyMessage')} />
             )}
 
             {lists !== null && lists.length > 0 && !selected && (
@@ -122,6 +137,8 @@ export function ListsPage() {
           </div>
         </PageContainer>
       </div>
+
+      <AddListModal isOpen={isAddOpen} onClose={closeAdd} onAdded={handleAdded} />
     </div>
   );
 }

@@ -1,4 +1,8 @@
-import { MdblistItemsQuerySchema, MdblistListParamsSchema } from '@findarr/shared/mdblist';
+import {
+  MdblistAddQuerySchema,
+  MdblistItemsQuerySchema,
+  MdblistListParamsSchema,
+} from '@findarr/shared/mdblist';
 import type { FastifyInstance } from 'fastify';
 
 import { protectedRoute } from '../utils/routes.js';
@@ -7,6 +11,10 @@ export const mdblistRoutes = (fastify: FastifyInstance) => {
   fastify.addHook('preHandler', fastify.requireAuth);
 
   fastify.get('/lists', async () => fastify.mdblist.listLists());
+
+  fastify.post('/lists', async (request) =>
+    fastify.mdblist.addList(MdblistAddQuerySchema.parse(request.body)),
+  );
 
   fastify.get(
     '/lists/:id/preview',

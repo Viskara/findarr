@@ -87,6 +87,11 @@ export const mdblistService = {
     return response.data;
   },
 
+  addList: async (query: MdblistAddQuery): Promise<MdblistList> => {
+    const response = await api.post<MdblistList>('/lists', query);
+    return response.data;
+  },
+
   getPreview: async (id: string): Promise<MdblistPreview> => {
     const response = await api.get<MdblistPreview>(`/lists/${id}/preview`);
     return response.data;

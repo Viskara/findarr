@@ -1,10 +1,10 @@
 import type { MdblistList } from '@findarr/shared/mdblist';
-import { getErrorMessage } from '@findarr/shared/utils';
 import { useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useConnectionState } from '../../hooks/useConnectionState';
 import { adminMdblistService, mdblistService } from '../../services/api';
+import { getApiErrorMessage } from '../../utils/apiError';
 import { asVoid } from '../../utils/asyncHandlers';
 import { Button } from '../ui/Button';
 import { InlineFeedback } from '../ui/InlineFeedback';
@@ -35,7 +35,7 @@ export function MdblistSection() {
         setName('');
         setSuccess(t('admin.mdblist.added'));
       } catch (error) {
-        setError(`${t('admin.mdblist.addError')} (${getErrorMessage(error)})`);
+        setError(`${t('admin.mdblist.addError')} (${getApiErrorMessage(error)})`);
       }
     });
   }
@@ -47,7 +47,7 @@ export function MdblistSection() {
       setLists((current) => current.filter((list) => list.id !== id));
       setSuccess(t('admin.mdblist.removed'));
     } catch (error) {
-      setError(getErrorMessage(error));
+      setError(getApiErrorMessage(error));
     }
   }
 
@@ -62,7 +62,7 @@ export function MdblistSection() {
             : t('admin.mdblist.synced', { synced }),
         );
       } catch (error) {
-        setError(getErrorMessage(error));
+        setError(getApiErrorMessage(error));
       }
     });
   }

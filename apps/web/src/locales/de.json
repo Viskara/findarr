@@ -455,13 +455,20 @@
     "description": "Durchsuche Listen, die von MDBList synchronisiert wurden.",
     "itemCount": "{{count}} Titel",
     "emptyTitle": "Noch keine Listen",
-    "emptyMessage": "Bitte einen Admin, in der Verwaltung eine MDBList-URL hinzuzufügen.",
-    "emptyMessageAdmin": "Füge in der Verwaltung eine MDBList-URL hinzu, um zu starten.",
-    "openAdmin": "Verwaltung öffnen",
+    "emptyMessage": "Füge einen MDBList-Link hinzu, um zu starten.",
     "loadError": "Diese Liste konnte nicht geladen werden.",
     "sidebarTitle": "Deine Listen",
     "allLists": "Alle Listen",
     "typeMixed": "Filme & Serien",
-    "previewUnavailable": "Vorschau nicht verfügbar."
+    "previewUnavailable": "Vorschau nicht verfügbar.",
+    "add": {
+      "button": "Liste hinzufügen",
+      "title": "Listen hinzufügen",
+      "description": "Füge MDBList-Links ein. Listen werden mit allen geteilt.",
+      "label": "MDBList-Links",
+      "placeholder": "https://mdblist.com/lists/benutzername/listenname",
+      "submit": "{{count}} Liste(n) hinzufügen",
+      "adding": "Wird hinzugefügt…"
+    }
   }
 }
