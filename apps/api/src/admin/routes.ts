@@ -1,5 +1,6 @@
 import { CreateUserSchema, DeleteUserSchema } from '@findarr/shared/auth';
 import { MdblistAddQuerySchema, MdblistListParamsSchema } from '@findarr/shared/mdblist';
+import { SeerrUserMappingParamsSchema, SeerrUserMappingQuerySchema } from '@findarr/shared/seerr';
 import {
   AdministrationSettingsQuerySchema,
   ArrSettingsQuerySchema,
@@ -59,6 +60,14 @@ const adminRoutes = (fastify: FastifyInstance) => {
     fastify.seerr.setSettings(LibSettingsQuerySchema.parse(r.body)),
   );
   fastify.post('/seerr/test', async () => fastify.seerr.testAndSync());
+  fastify.get('/seerr/users', async () => fastify.seerr.listUsers());
+  fastify.get('/seerr/user-mappings', async () => fastify.seerr.getUserMappings());
+  fastify.put('/seerr/user-mappings/:userId', async (r) =>
+    fastify.seerr.setUserMapping(
+      SeerrUserMappingParamsSchema.parse(r.params).userId,
+      SeerrUserMappingQuerySchema.parse(r.body).seerrUserId,
+    ),
+  );
 
   fastify.get('/tmdb/settings', () => fastify.tmdb.getSettings());
   fastify.put('/tmdb/settings', async (r) =>

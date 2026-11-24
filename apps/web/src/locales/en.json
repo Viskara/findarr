@@ -126,6 +126,16 @@
       "lastSynced": "Last synced {{date}}",
       "neverSynced": "Not synced yet",
       "addError": "Could not add the list. Check the URL and that the list is public."
+    },
+    "seerrUsers": {
+      "title": "Seerr users",
+      "description": "Choose which Seerr user each Findarr user requests as. Requests then appear under that user in Seerr and follow their quota, approval rules and notifications. Users left on the default are requested as the API key owner.",
+      "default": "Default (API key owner)",
+      "selectFor": "Seerr user for {{name}}",
+      "matchByEmail": "Match by email",
+      "matched": "Assigned {{count}} user(s) by matching email addresses.",
+      "unavailable": "Could not load Seerr users. Save the Seerr URL and API key above, enable Seerr, then retry.",
+      "retry": "Retry"
     }
   },
   "vote": {

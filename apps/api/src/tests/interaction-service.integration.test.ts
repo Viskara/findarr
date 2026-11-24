@@ -867,11 +867,10 @@ describe('interaction service - integration tests', () => {
         role: 'admin',
       });
 
-      expect(seerrService.requestMedia).toHaveBeenCalledWith({
-        mediaType: 'movie',
-        tmdbId: 123,
-        seasons: undefined,
-      });
+      expect(seerrService.requestMedia).toHaveBeenCalledWith(
+        { mediaType: 'movie', tmdbId: 123, seasons: undefined },
+        user.id,
+      );
       expect(radarrService.requestMedia).not.toHaveBeenCalled();
       expect(radarrService.trackExternalRequest).toHaveBeenCalled();
 

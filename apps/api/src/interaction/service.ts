@@ -96,17 +96,21 @@ export function createInteractionService(context: InteractionContext) {
     mediaRecord: DbMedia,
     details: MediaDetails,
     seasons: number[] | undefined,
+    userId: number,
   ): Promise<void> {
     if (!seerr.isConfigured()) {
       await requestMediaToArr(mediaRecord, details, seasons);
       return;
     }
 
-    await seerr.requestMedia({
-      mediaType: details.type,
-      tmdbId: details.tmdbId,
-      seasons: details.type === 'tv' ? seasons : undefined,
-    });
+    await seerr.requestMedia(
+      {
+        mediaType: details.type,
+        tmdbId: details.tmdbId,
+        seasons: details.type === 'tv' ? seasons : undefined,
+      },
+      userId,
+    );
     (details.type === 'movie' ? radarr : sonarr).trackExternalRequest();
   }
 
@@ -194,7 +198,7 @@ export function createInteractionService(context: InteractionContext) {
 
     if (shouldRequest) {
       // Forward to Seerr, or Radarr/Sonarr when Seerr is not configured
-      await requestMedia(mediaRow, details, data.seasons);
+      await requestMedia(mediaRow, details, data.seasons, user.id);
       timer.lap('requestArr');
 
       // Mark as requested only after the request actually reached Seerr/Radarr/Sonarr

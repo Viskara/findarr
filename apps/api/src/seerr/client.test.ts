@@ -23,6 +23,7 @@ describe('seerr client', () => {
   let server: Server;
   let baseUrl: string;
   let respondWith = 201;
+  let users: Record<string, unknown>[] = [];
   const recorded: Recorded[] = [];
 
   beforeAll(async () => {
@@ -35,9 +36,10 @@ describe('seerr client', () => {
           apiKey: request.headers['x-api-key'],
           body,
         });
-        const status = request.url === '/api/v1/auth/me' ? 200 : respondWith;
+        const isUserList = request.url?.startsWith('/api/v1/user?') === true;
+        const status = request.url === '/api/v1/auth/me' || isUserList ? 200 : respondWith;
         response.writeHead(status, { 'Content-Type': 'application/json' });
-        response.end('{}');
+        response.end(isUserList ? JSON.stringify({ results: users }) : '{}');
       };
       void handle();
     });
@@ -54,6 +56,7 @@ describe('seerr client', () => {
   beforeEach(() => {
     recorded.length = 0;
     respondWith = 201;
+    users = [];
   });
 
   afterAll(async () => {
@@ -90,6 +93,32 @@ describe('seerr client', () => {
 
     expect(recorded[0]?.body).toStrictEqual({ mediaType: 'tv', mediaId: 1396, seasons: 'all' });
     expect(recorded[1]?.body).toStrictEqual({ mediaType: 'tv', mediaId: 1396, seasons: [1, 2] });
+  });
+
+  it('sends the Seerr user id when requesting on behalf of someone', async () => {
+    const client = createSeerrClient(baseUrl, 'secret', createMockAppLogger());
+
+    await client.requestMedia({ mediaType: 'movie', tmdbId: 603, userId: 7 });
+
+    expect(recorded[0]?.body).toStrictEqual({ mediaType: 'movie', mediaId: 603, userId: 7 });
+  });
+
+  it('lists Seerr users with a readable name and email', async () => {
+    users = [
+      { id: 1, displayName: 'Admin', email: 'admin@example.com' },
+      { id: 2, username: 'sam', email: 'sam@example.com' },
+      { id: 3, email: 'only-email@example.com' },
+      { id: 4 },
+    ];
+    const client = createSeerrClient(baseUrl, 'secret', createMockAppLogger());
+
+    await expect(client.listUsers()).resolves.toStrictEqual([
+      { id: 1, name: 'Admin', email: 'admin@example.com' },
+      { id: 2, name: 'sam', email: 'sam@example.com' },
+      { id: 3, name: 'only-email@example.com', email: 'only-email@example.com' },
+      { id: 4, name: 'User 4', email: null },
+    ]);
+    expect(recorded[0]?.url).toContain('take=100');
   });
 
   it('treats 409 (already requested) as success but surfaces other errors', async () => {

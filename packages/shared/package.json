@@ -36,6 +36,10 @@
       "types": "./dist/mdblist.d.mts",
       "import": "./dist/mdblist.mjs"
     },
+    "./seerr": {
+      "types": "./dist/seerr.d.mts",
+      "import": "./dist/seerr.mjs"
+    },
     "./scheduler": {
       "types": "./dist/scheduler.d.mts",
       "import": "./dist/scheduler.mjs"

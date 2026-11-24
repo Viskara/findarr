@@ -16,6 +16,7 @@ export default defineConfig({
       'src/env.ts',
       'src/logs.ts',
       'src/mdblist.ts',
+      'src/seerr.ts',
       'src/version.ts',
     ],
     dts: true,

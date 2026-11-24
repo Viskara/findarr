@@ -186,6 +186,9 @@ export function createMockSeerrService(
     isConfigured: vi.fn<SeerrService['isConfigured']>().mockReturnValue(false),
     testConnection: vi.fn<SeerrService['testConnection']>().mockResolvedValue(false),
     testAndSync: vi.fn<SeerrService['testAndSync']>().mockResolvedValue(false),
+    listUsers: vi.fn<SeerrService['listUsers']>().mockResolvedValue([]),
+    getUserMappings: vi.fn<SeerrService['getUserMappings']>().mockResolvedValue({}),
+    setUserMapping: vi.fn<SeerrService['setUserMapping']>().mockResolvedValue({}),
     requestMedia: vi.fn<SeerrService['requestMedia']>(),
     ...overrides,
   };

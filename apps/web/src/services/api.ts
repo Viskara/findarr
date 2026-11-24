@@ -25,6 +25,7 @@ import type {
 } from '@findarr/shared/media';
 import type { UserPreferencesResponse } from '@findarr/shared/preferences';
 import type { SchedulerInfo } from '@findarr/shared/scheduler';
+import type { SeerrUser, SeerrUserMappings } from '@findarr/shared/seerr';
 import type {
   AdministrationSettings,
   AdministrationSettingsQuery,
@@ -101,6 +102,25 @@ export const adminMdblistService = {
 
   sync: async (): Promise<{ synced: number; failed: number }> => {
     const response = await api.post<{ synced: number; failed: number }>('/admin/mdblist/sync');
+    return response.data;
+  },
+};
+
+export const adminSeerrService = {
+  listUsers: async (): Promise<SeerrUser[]> => {
+    const response = await api.get<SeerrUser[]>('/admin/seerr/users');
+    return response.data;
+  },
+
+  getMappings: async (): Promise<SeerrUserMappings> => {
+    const response = await api.get<SeerrUserMappings>('/admin/seerr/user-mappings');
+    return response.data;
+  },
+
+  setMapping: async (userId: number, seerrUserId: number | null): Promise<SeerrUserMappings> => {
+    const response = await api.put<SeerrUserMappings>(`/admin/seerr/user-mappings/${userId}`, {
+      seerrUserId,
+    });
     return response.data;
   },
 };

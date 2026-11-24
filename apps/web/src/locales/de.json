@@ -126,6 +126,16 @@
       "lastSynced": "Zuletzt synchronisiert: {{date}}",
       "neverSynced": "Noch nicht synchronisiert",
       "addError": "Die Liste konnte nicht hinzugefügt werden. Prüfe die URL und ob die Liste öffentlich ist."
+    },
+    "seerrUsers": {
+      "title": "Seerr-Benutzer",
+      "description": "Lege fest, als welcher Seerr-Benutzer jeder Findarr-Benutzer Anfragen stellt. Die Anfragen erscheinen dann bei diesem Benutzer in Seerr und folgen dessen Kontingent, Freigaberegeln und Benachrichtigungen. Benutzer ohne Zuordnung fragen als Besitzer des API-Schlüssels an.",
+      "default": "Standard (Besitzer des API-Schlüssels)",
+      "selectFor": "Seerr-Benutzer für {{name}}",
+      "matchByEmail": "Per E-Mail zuordnen",
+      "matched": "{{count}} Benutzer anhand der E-Mail-Adresse zugeordnet.",
+      "unavailable": "Seerr-Benutzer konnten nicht geladen werden. Speichere oben die Seerr-URL und den API-Schlüssel, aktiviere Seerr und versuche es erneut.",
+      "retry": "Erneut versuchen"
     }
   },
   "vote": {
