@@ -1,5 +1,9 @@
 import { CreateUserSchema, DeleteUserSchema } from '@findarr/shared/auth';
-import { MdblistAddQuerySchema, MdblistListParamsSchema } from '@findarr/shared/mdblist';
+import {
+  MdblistAddQuerySchema,
+  MdblistListParamsSchema,
+  MdblistSyncSettingsQuerySchema,
+} from '@findarr/shared/mdblist';
 import { SeerrUserMappingParamsSchema, SeerrUserMappingQuerySchema } from '@findarr/shared/seerr';
 import {
   AdministrationSettingsQuerySchema,
@@ -83,6 +87,10 @@ const adminRoutes = (fastify: FastifyInstance) => {
     return { success: true };
   });
   fastify.post('/mdblist/sync', async () => fastify.mdblist.syncAll());
+  fastify.get('/mdblist/sync-settings', async () => fastify.mdblist.getSyncSettings());
+  fastify.put('/mdblist/sync-settings', async (r) =>
+    fastify.mdblist.setSyncSettings(MdblistSyncSettingsQuerySchema.parse(r.body)),
+  );
 };
 
 export { adminRoutes };

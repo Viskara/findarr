@@ -29,7 +29,7 @@ export function createSchedulerService(
     scheduler.state.lastError = null;
 
     const scheduleNext = () => {
-      scheduler.state.nextRun = Date.now() + interval;
+      scheduler.state.nextRun = Date.now() + scheduler.config.interval;
     };
 
     const terminate = () => {
@@ -186,6 +186,21 @@ export function createSchedulerService(
       }
 
       log.info({ schedulerName: params.name }, 'Scheduler started');
+    },
+
+    /**
+     * Change how often a scheduler runs. The next run is moved to one interval
+     * after the last run, so shortening the interval can make it due right away.
+     */
+    updateInterval(params: SchedulerParams, intervalMs: number): void {
+      const scheduler = schedulers[params.name];
+      scheduler.config.interval = intervalMs;
+
+      if (scheduler.state.enabled && !scheduler.state.isRunning) {
+        scheduler.state.nextRun = (scheduler.state.lastRun ?? Date.now()) + intervalMs;
+      }
+
+      log.info({ schedulerName: params.name, intervalMs }, 'Scheduler interval updated');
     },
 
     /**

@@ -113,7 +113,7 @@
     "voteThresholdDescription": "Ein Film oder eine Serie wird automatisch angefordert, sobald diese Anzahl an Upvotes erreicht ist. Admin-Votes umgehen diese Schwelle immer und lösen die Anforderung direkt aus.",
     "mdblist": {
       "title": "MDBList",
-      "description": "Füge URLs öffentlicher MDBList-Listen hinzu. Sie werden alle 6 Stunden synchronisiert und unter Listen angezeigt.",
+      "description": "Füge URLs öffentlicher MDBList-Listen hinzu. Sie werden automatisch nach dem Zeitplan unten synchronisiert und unter Listen angezeigt.",
       "urlLabel": "Listen-URL",
       "urlPlaceholder": "https://mdblist.com/lists/benutzername/listenname",
       "nameLabel": "Anzeigename (optional)",
@@ -130,7 +130,17 @@
       "titles": "{{count}} Titel",
       "lastSynced": "Zuletzt synchronisiert: {{date}}",
       "neverSynced": "Noch nicht synchronisiert",
-      "addError": "Die Liste konnte nicht hinzugefügt werden. Prüfe die URL und ob die Liste öffentlich ist."
+      "addError": "Die Liste konnte nicht hinzugefügt werden. Prüfe die URL und ob die Liste öffentlich ist.",
+      "scheduleLabel": "Synchronisierungsplan",
+      "scheduleHint": "Wie oft jede Liste neu von MDBList geladen wird. Mit „Jetzt synchronisieren“ aktualisierst du sofort.",
+      "scheduleSaved": "Synchronisierungsplan gespeichert.",
+      "every": {
+        "hour": "Jede Stunde",
+        "hours": "Alle {{count}} Stunden",
+        "day": "Jeden Tag",
+        "days": "Alle {{count}} Tage",
+        "week": "Jede Woche"
+      }
     },
     "seerrUsers": {
       "title": "Seerr-Benutzer",

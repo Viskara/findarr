@@ -9,17 +9,26 @@ import { asVoid } from '../../utils/asyncHandlers';
 import { Button } from '../ui/Button';
 import { InlineFeedback } from '../ui/InlineFeedback';
 import { Input } from '../ui/Input';
+import { SelectInput } from '../ui/SelectInput';
 import { IntegrationCard } from './IntegrationCard';
+
+const SYNC_PRESET_HOURS = [1, 2, 3, 6, 12, 24, 48, 72, 168];
 
 export function MdblistSection() {
   const { t } = useTranslation();
   const [lists, setLists] = useState<MdblistList[]>([]);
   const [url, setUrl] = useState('');
   const [name, setName] = useState('');
+  const [intervalHours, setIntervalHours] = useState(6);
 
   const { isSaving, isTesting, feedback, clearFeedback, setError, setSuccess, wrapSave, wrapTest } =
     useConnectionState(async () => {
-      setLists(await mdblistService.listLists());
+      const [loadedLists, syncSettings] = await Promise.all([
+        mdblistService.listLists(),
+        adminMdblistService.getSyncSettings(),
+      ]);
+      setLists(loadedLists);
+      setIntervalHours(syncSettings.intervalHours);
     });
 
   function handleAdd(event: ChangeEvent<HTMLFormElement>) {
@@ -50,6 +59,40 @@ export function MdblistSection() {
       setError(getApiErrorMessage(error));
     }
   }
+
+  async function handleIntervalChange(hours: number) {
+    clearFeedback();
+    const previous = intervalHours;
+    setIntervalHours(hours);
+    try {
+      const saved = await adminMdblistService.setSyncSettings({ intervalHours: hours });
+      setIntervalHours(saved.intervalHours);
+      setSuccess(t('admin.mdblist.scheduleSaved'));
+    } catch (error) {
+      setIntervalHours(previous);
+      setError(getApiErrorMessage(error));
+    }
+  }
+
+  function intervalLabel(hours: number): string {
+    if (hours === 1) {
+      return t('admin.mdblist.every.hour');
+    }
+    if (hours === 24) {
+      return t('admin.mdblist.every.day');
+    }
+    if (hours === 168) {
+      return t('admin.mdblist.every.week');
+    }
+    return hours % 24 === 0
+      ? t('admin.mdblist.every.days', { count: hours / 24 })
+      : t('admin.mdblist.every.hours', { count: hours });
+  }
+
+  // Keep an unusual saved value selectable instead of silently showing another one.
+  const intervalOptions = SYNC_PRESET_HOURS.includes(intervalHours)
+    ? SYNC_PRESET_HOURS
+    : [...SYNC_PRESET_HOURS, intervalHours].toSorted((a, b) => a - b);
 
   async function handleSync() {
     await wrapTest(async () => {
@@ -113,6 +156,26 @@ export function MdblistSection() {
             setName(event.target.value);
           }}
         />
+
+        <div>
+          <label className="mb-1.5 block text-sm text-zinc-300" htmlFor="mdblist-sync-interval">
+            {t('admin.mdblist.scheduleLabel')}
+          </label>
+          <SelectInput
+            id="mdblist-sync-interval"
+            value={String(intervalHours)}
+            onChange={(event) => {
+              void handleIntervalChange(Number(event.target.value));
+            }}
+          >
+            {intervalOptions.map((hours) => (
+              <option key={hours} value={String(hours)}>
+                {intervalLabel(hours)}
+              </option>
+            ))}
+          </SelectInput>
+          <p className="mt-1.5 text-xs text-zinc-500">{t('admin.mdblist.scheduleHint')}</p>
+        </div>
 
         {lists.length === 0 ? (
           <p className="text-sm text-zinc-500">{t('admin.mdblist.noLists')}</p>

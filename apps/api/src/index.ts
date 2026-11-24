@@ -107,6 +107,9 @@ async function start() {
     await server.register(adminLogsRoutes, { prefix: '/api/admin' });
     await server.register(versionRoutes, { prefix: '/api/admin' });
 
+    // Apply the saved MDBList sync interval before the first run is scheduled
+    await server.mdblist.applySyncSettings();
+
     // Start scheduler orchestration
     server.scheduler.startOrchestration();
 

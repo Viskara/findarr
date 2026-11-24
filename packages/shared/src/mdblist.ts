@@ -17,6 +17,14 @@ export const MdblistItemsQuerySchema = z.object({
   page: z.coerce.number().int().min(1).max(1000).default(1),
 });
 
+export const MDBLIST_DEFAULT_SYNC_HOURS = 6;
+export const MDBLIST_MAX_SYNC_HOURS = 24 * 30;
+
+export const MdblistSyncSettingsQuerySchema = z.object({
+  intervalHours: z.number().int().min(1).max(MDBLIST_MAX_SYNC_HOURS),
+});
+
+export type MdblistSyncSettings = z.infer<typeof MdblistSyncSettingsQuerySchema>;
 export type MdblistAddQuery = z.infer<typeof MdblistAddQuerySchema>;
 export type MdblistListParams = z.infer<typeof MdblistListParamsSchema>;
 export type MdblistItemsQuery = z.infer<typeof MdblistItemsQuerySchema>;

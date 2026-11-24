@@ -174,6 +174,11 @@ export function createMockMdblistService(
     syncAll: vi.fn<MdblistService['syncAll']>().mockResolvedValue({ synced: 0, failed: 0 }),
     getItems: vi.fn<MdblistService['getItems']>(),
     getPreview: vi.fn<MdblistService['getPreview']>(),
+    getSyncSettings: vi
+      .fn<MdblistService['getSyncSettings']>()
+      .mockResolvedValue({ intervalHours: 6 }),
+    setSyncSettings: vi.fn<MdblistService['setSyncSettings']>(),
+    applySyncSettings: vi.fn<MdblistService['applySyncSettings']>(),
     ...overrides,
   };
 }
@@ -206,6 +211,7 @@ export function createMockSchedulerService(
     stopOrchestration: vi.fn<SchedulerService['stopOrchestration']>(),
     setState: vi.fn<SchedulerService['setState']>(),
     trigger: vi.fn<SchedulerService['trigger']>(),
+    updateInterval: vi.fn<SchedulerService['updateInterval']>(),
     ...overrides,
   };
 }

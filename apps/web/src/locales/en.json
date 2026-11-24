@@ -113,7 +113,7 @@
     "voteThresholdDescription": "A movie or show is requested automatically once it reaches this many upvotes. Admin votes always request immediately and override this threshold.",
     "mdblist": {
       "title": "MDBList",
-      "description": "Add public MDBList list URLs. They are synced every 6 hours and appear under Lists.",
+      "description": "Add public MDBList list URLs. They are re-synced automatically on the schedule below and appear under Lists.",
       "urlLabel": "List URL",
       "urlPlaceholder": "https://mdblist.com/lists/username/list-name",
       "nameLabel": "Display name (optional)",
@@ -130,7 +130,17 @@
       "titles": "{{count}} titles",
       "lastSynced": "Last synced {{date}}",
       "neverSynced": "Not synced yet",
-      "addError": "Could not add the list. Check the URL and that the list is public."
+      "addError": "Could not add the list. Check the URL and that the list is public.",
+      "scheduleLabel": "Sync schedule",
+      "scheduleHint": "How often every list is re-downloaded from MDBList. Use Sync now to refresh immediately.",
+      "scheduleSaved": "Sync schedule saved.",
+      "every": {
+        "hour": "Every hour",
+        "hours": "Every {{count}} hours",
+        "day": "Every day",
+        "days": "Every {{count}} days",
+        "week": "Every week"
+      }
     },
     "seerrUsers": {
       "title": "Seerr users",

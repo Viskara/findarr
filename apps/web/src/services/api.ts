@@ -19,6 +19,7 @@ import type {
   MdblistItemsResponse,
   MdblistList,
   MdblistPreview,
+  MdblistSyncSettings,
 } from '@findarr/shared/mdblist';
 import type {
   SearchResponse,
@@ -113,6 +114,16 @@ export const adminMdblistService = {
 
   removeList: async (id: string): Promise<void> => {
     await api.delete(`/admin/mdblist/lists/${id}`);
+  },
+
+  getSyncSettings: async (): Promise<MdblistSyncSettings> => {
+    const response = await api.get<MdblistSyncSettings>('/admin/mdblist/sync-settings');
+    return response.data;
+  },
+
+  setSyncSettings: async (settings: MdblistSyncSettings): Promise<MdblistSyncSettings> => {
+    const response = await api.put<MdblistSyncSettings>('/admin/mdblist/sync-settings', settings);
+    return response.data;
   },
 
   sync: async (): Promise<{ synced: number; failed: number }> => {

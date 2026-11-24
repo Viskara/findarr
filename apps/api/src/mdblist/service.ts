@@ -1,16 +1,20 @@
 import {
+  MDBLIST_DEFAULT_SYNC_HOURS,
+  MDBLIST_MAX_SYNC_HOURS,
   MDBLIST_PAGE_SIZE,
   MDBLIST_PREVIEW_SIZE,
   type MdblistAddQuery,
   type MdblistItemsResponse,
   type MdblistList,
   type MdblistPreview,
+  type MdblistSyncSettings,
 } from '@findarr/shared/mdblist';
 import type { Media } from '@findarr/shared/media';
 import { getErrorMessage, isDefined } from '@findarr/shared/utils';
 import { z } from 'zod';
 
 import type { MediaService } from '../media/service.js';
+import type { SchedulerService } from '../scheduler/service.js';
 import type { SettingsService } from '../settings/service.js';
 import type { TMDBService } from '../tmdb/service.js';
 import type { UserService } from '../user/service.js';
@@ -26,6 +30,8 @@ import {
 } from './client.js';
 
 const SETTINGS_KEY = 'mdblistLists';
+const SYNC_HOURS_KEY = 'mdblistSyncIntervalHours';
+const HOUR_MS = 60 * 60 * 1000;
 export const MAX_LISTS = 50;
 
 const StoredListSchema = z.object({
@@ -47,6 +53,8 @@ export interface MdblistContext {
   user: UserService;
   media: MediaService;
   appLog: AppLogger;
+  /** Registered after this service, so it is only read when a method runs. */
+  scheduler: SchedulerService;
 }
 
 function toPublic(list: StoredList): MdblistList {
@@ -253,7 +261,35 @@ export function createMdblistService(context: MdblistContext) {
     });
   }
 
-  return { listLists, addList, removeList, syncAll, getItems, getPreview };
+  async function getSyncSettings(): Promise<MdblistSyncSettings> {
+    const hours = Number(await settings.get(SYNC_HOURS_KEY));
+    const valid = Number.isInteger(hours) && hours >= 1 && hours <= MDBLIST_MAX_SYNC_HOURS;
+    return { intervalHours: valid ? hours : MDBLIST_DEFAULT_SYNC_HOURS };
+  }
+
+  /** Push the saved interval into the scheduler (called at startup and on change). */
+  async function applySyncSettings(): Promise<void> {
+    const { intervalHours } = await getSyncSettings();
+    context.scheduler.updateInterval({ name: 'mdblistSync' }, intervalHours * HOUR_MS);
+  }
+
+  async function setSyncSettings(query: MdblistSyncSettings): Promise<MdblistSyncSettings> {
+    await settings.set({ [SYNC_HOURS_KEY]: String(query.intervalHours) });
+    await applySyncSettings();
+    return getSyncSettings();
+  }
+
+  return {
+    listLists,
+    addList,
+    removeList,
+    syncAll,
+    getItems,
+    getPreview,
+    getSyncSettings,
+    setSyncSettings,
+    applySyncSettings,
+  };
 }
 
 export type MdblistService = ReturnType<typeof createMdblistService>;
