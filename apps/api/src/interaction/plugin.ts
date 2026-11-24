@@ -20,5 +20,15 @@ const interactionPlugin = (fastify: FastifyInstance) => {
 
 export default fp(interactionPlugin, {
   name: 'interaction',
-  dependencies: ['database', 'tmdb', 'arr', 'catalog', 'user', 'media', 'settings', 'preferences'],
+  dependencies: [
+    'database',
+    'tmdb',
+    'arr',
+    'seerr',
+    'catalog',
+    'user',
+    'media',
+    'settings',
+    'preferences',
+  ],
 });

@@ -22,6 +22,14 @@ const libServiceConfig = {
     apiKeyLabel: 'Token' as const,
     apiKeyPlaceholder: 'Enter Plex token',
   },
+  seerr: {
+    title: 'Seerr',
+    description:
+      'Request manager (Overseerr / Jellyseerr) — when set, requests are sent to Seerr instead of directly to Radarr and Sonarr',
+    urlPlaceholder: 'http://localhost:5055',
+    apiKeyLabel: 'API Key' as const,
+    apiKeyPlaceholder: 'Enter Seerr API key',
+  },
 } as const;
 
 interface LibSectionProps {
@@ -105,7 +113,11 @@ export function LibSection({ service, forceDisabled, onEnable }: LibSectionProps
   return (
     <IntegrationCard
       title={config.title}
-      description="Media server — tracks availability of requested content"
+      description={
+        'description' in config
+          ? config.description
+          : 'Media server — tracks availability of requested content'
+      }
       enabled={forceDisabled === true ? false : enabled}
       onToggleEnabled={handleToggleEnabled}
       onSubmit={asVoid(handleSave)}

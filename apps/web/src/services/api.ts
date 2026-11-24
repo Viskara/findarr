@@ -242,7 +242,7 @@ export function createArrServiceApi(service: 'radarr' | 'sonarr') {
   };
 }
 
-export function createLibServiceApi(service: 'jellyfin' | 'plex') {
+export function createLibServiceApi(service: 'jellyfin' | 'plex' | 'seerr') {
   return {
     getSettings: async (): Promise<LibSettings> => {
       const response = await api.get<LibSettings>(`/admin/${service}/settings`);

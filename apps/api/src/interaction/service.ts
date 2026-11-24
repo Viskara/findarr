@@ -15,6 +15,7 @@ import {
 } from '../media/repository.js';
 import type { MediaService } from '../media/service.js';
 import type { PreferencesService } from '../preferences/service.js';
+import type { SeerrService } from '../seerr/service.js';
 import type { SettingsService } from '../settings/service.js';
 import type { TMDBService } from '../tmdb/service.js';
 import type { UserService } from '../user/service.js';
@@ -32,6 +33,7 @@ export interface InteractionContext {
   tmdb: TMDBService;
   radarr: AnyArrService;
   sonarr: AnyArrService;
+  seerr: SeerrService;
   catalog: CatalogService;
   user: UserService;
   media: MediaService;
@@ -50,6 +52,7 @@ export function createInteractionService(context: InteractionContext) {
     tmdb,
     radarr,
     sonarr,
+    seerr,
     catalog,
     user: userService,
     media,
@@ -83,6 +86,28 @@ export function createInteractionService(context: InteractionContext) {
       mediaRecord.arrId,
       seasons,
     );
+  }
+
+  /**
+   * Forward a media request to Seerr when it is configured, otherwise straight
+   * to Radarr (movies) or Sonarr (TV shows).
+   */
+  async function requestMedia(
+    mediaRecord: DbMedia,
+    details: MediaDetails,
+    seasons: number[] | undefined,
+  ): Promise<void> {
+    if (!seerr.isConfigured()) {
+      await requestMediaToArr(mediaRecord, details, seasons);
+      return;
+    }
+
+    await seerr.requestMedia({
+      mediaType: details.type,
+      tmdbId: details.tmdbId,
+      seasons: details.type === 'tv' ? seasons : undefined,
+    });
+    (details.type === 'movie' ? radarr : sonarr).trackExternalRequest();
   }
 
   async function enrichInteractionPage(
@@ -168,11 +193,11 @@ export function createInteractionService(context: InteractionContext) {
       (mediaRow.status !== 'available' || isSeasonUpdate);
 
     if (shouldRequest) {
-      // Forward to Radarr/Sonarr (handles both create and update based on arrId)
-      await requestMediaToArr(mediaRow, details, data.seasons);
+      // Forward to Seerr, or Radarr/Sonarr when Seerr is not configured
+      await requestMedia(mediaRow, details, data.seasons);
       timer.lap('requestArr');
 
-      // Mark as requested only after the request actually reached Radarr/Sonarr
+      // Mark as requested only after the request actually reached Seerr/Radarr/Sonarr
       await advanceMediaStatus(db, mediaRow, 'requested');
       timer.lap('updateMediaStatus');
     }

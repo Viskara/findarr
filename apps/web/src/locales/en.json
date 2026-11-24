@@ -183,8 +183,8 @@
     "actionLabel": "Your interaction",
     "action": {
       "all": "All",
-      "liked": "Liked",
-      "disliked": "Disliked"
+      "liked": "Requested",
+      "disliked": "Removed"
     },
     "audience": {
       "mine": "Mine",
@@ -204,10 +204,10 @@
     "filter": {
       "all": "All activity",
       "allDesc": "Show everything you have voted on.",
-      "upvotes": "Upvotes",
-      "upvotesDesc": "Focus on titles you liked.",
-      "downvotes": "Downvotes",
-      "downvotesDesc": "Focus on titles you disliked."
+      "upvotes": "Requests",
+      "upvotesDesc": "Focus on titles you requested.",
+      "downvotes": "Removed",
+      "downvotesDesc": "Focus on titles you removed."
     }
   },
   "users": {
@@ -273,12 +273,13 @@
   },
   "media": {
     "noPoster": "No Poster",
-    "like": "Like",
-    "dislike": "Dislike",
+    "like": "Request",
+    "dislike": "Remove",
     "newlyAvailable": "Newly available",
     "noNewlyAvailable": "No newly available titles yet.",
     "mediaTypeMovie": "Movie",
-    "mediaTypeTv": "TV"
+    "mediaTypeTv": "TV",
+    "upvotedBy": "Requested by"
   },
   "passwordForm": {
     "currentPassword": "Current Password",
@@ -442,6 +443,7 @@
     "emptyMessage": "Ask an admin to add an MDBList URL in Administration.",
     "emptyMessageAdmin": "Add an MDBList URL in Administration to get started.",
     "openAdmin": "Open administration",
-    "loadError": "Could not load this list."
+    "loadError": "Could not load this list.",
+    "sidebarTitle": "Your lists"
   }
 }

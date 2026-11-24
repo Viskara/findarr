@@ -54,6 +54,12 @@ const adminRoutes = (fastify: FastifyInstance) => {
     fastify.get(`/${name}/root-folders`, async () => svc.listRootFolders());
   }
 
+  fastify.get('/seerr/settings', () => fastify.seerr.getSettings());
+  fastify.put('/seerr/settings', async (r) =>
+    fastify.seerr.setSettings(LibSettingsQuerySchema.parse(r.body)),
+  );
+  fastify.post('/seerr/test', async () => fastify.seerr.testAndSync());
+
   fastify.get('/tmdb/settings', () => fastify.tmdb.getSettings());
   fastify.put('/tmdb/settings', async (r) =>
     fastify.tmdb.setSettings(TmdbSettingsQuerySchema.parse(r.body)),

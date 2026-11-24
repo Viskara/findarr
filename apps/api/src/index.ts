@@ -27,6 +27,7 @@ import { rebuildUserPreferences } from './preferences/rebuild.js';
 import { preferencesRoutes } from './preferences/routes.js';
 import schedulerPlugin from './scheduler/plugin.js';
 import { adminSchedulerRoutes, schedulerRoutes } from './scheduler/routes.js';
+import seerrPlugin from './seerr/plugin.js';
 import settingsPlugin from './settings/plugin.js';
 import tmdbPlugin from './tmdb/plugin.js';
 import userPlugin from './user/plugin.js';
@@ -82,6 +83,7 @@ async function start() {
     await server.register(mediaPlugin);
     await server.register(libPlugin);
     await server.register(arrPlugin);
+    await server.register(seerrPlugin);
     await server.register(catalogPlugin);
     await server.register(mdblistPlugin);
     await server.register(interactionPlugin);

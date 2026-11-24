@@ -123,6 +123,16 @@ export async function createArrService<T extends ArrServiceConfig>(
     return libraryItem;
   }
 
+  /**
+   * Start the fast queue sync so a request made outside Radarr/Sonarr (e.g. via
+   * Seerr) is picked up as soon as it appears in the queue.
+   */
+  function trackExternalRequest(): void {
+    if (lifecycle.isConfigured()) {
+      context.scheduler.start({ name: config.queueFastSyncScheduler });
+    }
+  }
+
   async function listQualityProfiles(): Promise<ArrQualityProfile[]> {
     return lifecycle.client().listQualityProfiles();
   }
@@ -150,6 +160,7 @@ export async function createArrService<T extends ArrServiceConfig>(
     testConnection,
     testAndSync,
     requestMedia,
+    trackExternalRequest,
     listQualityProfiles,
     listRootFolders,
     listLibraryItems,

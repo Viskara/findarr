@@ -44,6 +44,7 @@ export function AdministrationPage() {
           />
           <ArrSection service="radarr" />
           <ArrSection service="sonarr" />
+          <LibSection service="seerr" />
         </div>
       </div>
     </PageContainer>

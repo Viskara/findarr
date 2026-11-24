@@ -134,7 +134,7 @@ export function LikeDislikeButton({
             }`}
             title={t('media.like')}
           >
-            <Icon filled name="thumb_up" size="sm" weight={500} />
+            <Icon filled name="download" size="sm" weight={500} />
           </button>
 
           <span className="mx-0.5 h-5 w-px bg-zinc-700/80" />
@@ -152,7 +152,7 @@ export function LikeDislikeButton({
             }`}
             title={t('media.dislike')}
           >
-            <Icon filled name="thumb_down" size="sm" weight={500} />
+            <Icon filled name="close" size="sm" weight={500} />
           </button>
         </div>
       ) : (
@@ -171,7 +171,7 @@ export function LikeDislikeButton({
             } disabled:cursor-not-allowed disabled:opacity-50`}
             title={t('media.like')}
           >
-            <Icon filled name="thumb_up" weight={500} />
+            <Icon filled name="download" weight={500} />
             <span>{t('media.like')}</span>
           </button>
 
@@ -189,7 +189,7 @@ export function LikeDislikeButton({
             } disabled:cursor-not-allowed disabled:opacity-50`}
             title={t('media.dislike')}
           >
-            <Icon filled name="thumb_down" weight={500} />
+            <Icon filled name="close" weight={500} />
             <span>{t('media.dislike')}</span>
           </button>
         </div>

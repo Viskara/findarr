@@ -16,6 +16,7 @@ import { createUserService } from '../user/service.js';
 import {
   createMockCatalogService,
   createMockRadarrService,
+  createMockSeerrService,
   createMockSonarrService,
   createMockTMDBService,
   createMockAppLogger,
@@ -35,6 +36,7 @@ const interaction: CreateMediaInteraction = {
 
 const radarrService = createMockRadarrService();
 const sonarrService = createMockSonarrService();
+const seerrService = createMockSeerrService();
 const catalogService = createMockCatalogService();
 
 // Thin adapters that build the interaction service from the mocked dependencies
@@ -58,6 +60,7 @@ const createInteraction = async (
     tmdb,
     radarr,
     sonarr,
+    seerr: seerrService,
     catalog,
     user,
     media: mediaService,
@@ -89,6 +92,7 @@ const buildService = (tmdbService: TMDBService, db: Database): InteractionServic
     tmdb: tmdbService,
     radarr: radarrService,
     sonarr: sonarrService,
+    seerr: seerrService,
     catalog: catalogService,
     user: userService,
     media: mediaService,
@@ -844,6 +848,55 @@ describe('interaction service - integration tests', () => {
       await vi.waitFor(() => {
         expect(radarrService.requestMedia).toHaveBeenCalled();
       });
+    });
+  });
+
+  describe('seerr requests', () => {
+    afterEach(() => {
+      vi.mocked(seerrService.isConfigured).mockReturnValue(false);
+    });
+
+    it('sends the request to Seerr instead of Radarr when Seerr is configured', async () => {
+      vi.clearAllMocks();
+      vi.mocked(seerrService.isConfigured).mockReturnValue(true);
+      const user = await createTestUserInDb(db, { email: 'seerr@test.com', displayName: 'S' });
+      expectDefined(user);
+
+      await createInteraction(db, tmdb, radarrService, sonarrService, catalogService, interaction, {
+        ...user,
+        role: 'admin',
+      });
+
+      expect(seerrService.requestMedia).toHaveBeenCalledWith({
+        mediaType: 'movie',
+        tmdbId: 123,
+        seasons: undefined,
+      });
+      expect(radarrService.requestMedia).not.toHaveBeenCalled();
+      expect(radarrService.trackExternalRequest).toHaveBeenCalled();
+
+      const media = await getMediaByTmdbId(db, 123, 'movie');
+      expectDefined(media);
+      expect(media.status).toBe('requested');
+    });
+
+    it('does not mark the title as requested when Seerr rejects the request', async () => {
+      vi.clearAllMocks();
+      vi.mocked(seerrService.isConfigured).mockReturnValue(true);
+      vi.mocked(seerrService.requestMedia).mockRejectedValueOnce(new Error('Seerr is down'));
+      const user = await createTestUserInDb(db, { email: 'seerr2@test.com', displayName: 'S2' });
+      expectDefined(user);
+
+      await expect(
+        createInteraction(db, tmdb, radarrService, sonarrService, catalogService, interaction, {
+          ...user,
+          role: 'admin',
+        }),
+      ).rejects.toThrow('Seerr is down');
+
+      const media = await getMediaByTmdbId(db, 123, 'movie');
+      expectDefined(media);
+      expect(media.status).not.toBe('requested');
     });
   });
 });

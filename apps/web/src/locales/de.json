@@ -183,8 +183,8 @@
     "actionLabel": "Deine Interaktion",
     "action": {
       "all": "Alle",
-      "liked": "Positiv bewertet",
-      "disliked": "Negativ bewertet"
+      "liked": "Angefragt",
+      "disliked": "Entfernt"
     },
     "audience": {
       "mine": "Meine",
@@ -204,10 +204,10 @@
     "filter": {
       "all": "Alle Aktivitäten",
       "allDesc": "Alles anzeigen, über das du abgestimmt hast.",
-      "upvotes": "Positiv bewertet",
-      "upvotesDesc": "Fokus auf Titel, die dir gefallen haben.",
-      "downvotes": "Negativ bewertet",
-      "downvotesDesc": "Fokus auf Titel, die dir nicht gefallen haben."
+      "upvotes": "Angefragt",
+      "upvotesDesc": "Fokus auf Titel, die du angefragt hast.",
+      "downvotes": "Entfernt",
+      "downvotesDesc": "Fokus auf Titel, die du entfernt hast."
     }
   },
   "users": {
@@ -273,12 +273,13 @@
   },
   "media": {
     "noPoster": "Kein Poster",
-    "like": "Gefällt mir",
-    "dislike": "Gefällt mir nicht",
+    "like": "Anfragen",
+    "dislike": "Entfernen",
     "newlyAvailable": "Neu verfügbar",
     "noNewlyAvailable": "Noch keine neu verfügbaren Titel.",
     "mediaTypeMovie": "Film",
-    "mediaTypeTv": "Serie"
+    "mediaTypeTv": "Serie",
+    "upvotedBy": "Angefragt von"
   },
   "passwordForm": {
     "currentPassword": "Aktuelles Passwort",
@@ -442,6 +443,7 @@
     "emptyMessage": "Bitte einen Admin, in der Verwaltung eine MDBList-URL hinzuzufügen.",
     "emptyMessageAdmin": "Füge in der Verwaltung eine MDBList-URL hinzu, um zu starten.",
     "openAdmin": "Verwaltung öffnen",
-    "loadError": "Diese Liste konnte nicht geladen werden."
+    "loadError": "Diese Liste konnte nicht geladen werden.",
+    "sidebarTitle": "Deine Listen"
   }
 }

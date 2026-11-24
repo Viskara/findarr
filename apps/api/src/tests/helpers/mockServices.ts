@@ -10,6 +10,7 @@ import type { LibService } from '../../lib/service.js';
 import type { MdblistService } from '../../mdblist/service.js';
 import type { SchedulerService } from '../../scheduler/service.js';
 import type { SchedulerContext } from '../../scheduler/types.js';
+import type { SeerrService } from '../../seerr/service.js';
 import type { TMDBService } from '../../tmdb/service.js';
 import type { AppLogger } from '../../utils/logger.js';
 import { createTestMovieDetail, createTestTVDetail } from './testHelper.js';
@@ -64,6 +65,7 @@ export function createMockArrService<T extends ArrServiceConfig>(
     getSettings: vi.fn<ArrService<T>['getSettings']>().mockResolvedValue(settings),
     setSettings: vi.fn<ArrService<T>['setSettings']>().mockResolvedValue(settings),
     requestMedia: vi.fn<ArrService<T>['requestMedia']>(),
+    trackExternalRequest: vi.fn<ArrService<T>['trackExternalRequest']>(),
     isConfigured: vi.fn<ArrService<T>['isConfigured']>().mockReturnValue(true),
     testConnection: vi.fn<ArrService<T>['testConnection']>().mockResolvedValue(false),
     testAndSync: vi.fn<ArrService<T>['testAndSync']>().mockResolvedValue(true),
@@ -171,6 +173,20 @@ export function createMockMdblistService(
     removeList: vi.fn<MdblistService['removeList']>(),
     syncAll: vi.fn<MdblistService['syncAll']>().mockResolvedValue({ synced: 0, failed: 0 }),
     getItems: vi.fn<MdblistService['getItems']>(),
+    ...overrides,
+  };
+}
+
+export function createMockSeerrService(
+  overrides: Partial<Mocked<SeerrService>> = {},
+): Mocked<SeerrService> {
+  return {
+    getSettings: vi.fn<SeerrService['getSettings']>(),
+    setSettings: vi.fn<SeerrService['setSettings']>(),
+    isConfigured: vi.fn<SeerrService['isConfigured']>().mockReturnValue(false),
+    testConnection: vi.fn<SeerrService['testConnection']>().mockResolvedValue(false),
+    testAndSync: vi.fn<SeerrService['testAndSync']>().mockResolvedValue(false),
+    requestMedia: vi.fn<SeerrService['requestMedia']>(),
     ...overrides,
   };
 }

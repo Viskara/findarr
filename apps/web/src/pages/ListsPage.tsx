@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 
+import { ListsSidebar } from '../components/lists/ListsSidebar';
 import { PaginatedMediaResults } from '../components/media/PaginatedMediaResults';
 import { LoadingState, StateDisplay } from '../components/ui';
 import { PageContainer } from '../components/ui/PageContainer';
@@ -47,68 +48,81 @@ export function ListsPage() {
   useMediaUpdateSubscription(feed.updateItem);
 
   return (
-    <PageContainer>
-      <div className="space-y-6 md:space-y-8">
-        <PageHeader
-          title={selected?.name ?? t('lists.title')}
-          description={
-            selected ? t('lists.itemCount', { count: selected.itemCount }) : t('lists.description')
-          }
-        />
+    <div className="md:flex">
+      {lists !== null && lists.length > 0 && (
+        <ListsSidebar lists={lists} selectedId={selected?.id} />
+      )}
 
-        {lists === null && (
-          <LoadingState className="flex min-h-[50vh] items-center justify-center" />
-        )}
+      <div className="min-w-0 flex-1">
+        <PageContainer>
+          <div className="space-y-6 md:space-y-8">
+            <PageHeader
+              title={selected?.name ?? t('lists.title')}
+              description={
+                selected
+                  ? t('lists.itemCount', { count: selected.itemCount })
+                  : t('lists.description')
+              }
+            />
 
-        {lists?.length === 0 && (
-          <StateDisplay
-            title={t('lists.emptyTitle')}
-            message={isAdmin ? t('lists.emptyMessageAdmin') : t('lists.emptyMessage')}
-            action={
-              isAdmin ? (
-                <Link
-                  to="/admin/administration"
-                  className="text-sm font-medium text-amber-300 hover:text-amber-200"
-                >
-                  {t('lists.openAdmin')}
-                </Link>
-              ) : undefined
-            }
-          />
-        )}
+            {lists === null && (
+              <LoadingState className="flex min-h-[50vh] items-center justify-center" />
+            )}
 
-        {lists !== null && lists.length > 0 && (
-          <>
-            {lists.length > 1 && (
-              <QuickActionBar
-                items={lists.map((list) => ({
-                  id: list.id,
-                  label: list.name,
-                  icon: 'view_list',
-                  selected: list.id === selected?.id,
-                  onClick: () => {
-                    setSearchParams({ list: list.id }, { replace: true });
-                  },
-                }))}
+            {lists?.length === 0 && (
+              <StateDisplay
+                title={t('lists.emptyTitle')}
+                message={isAdmin ? t('lists.emptyMessageAdmin') : t('lists.emptyMessage')}
+                action={
+                  isAdmin ? (
+                    <Link
+                      to="/admin/administration"
+                      className="text-sm font-medium text-amber-300 hover:text-amber-200"
+                    >
+                      {t('lists.openAdmin')}
+                    </Link>
+                  ) : undefined
+                }
               />
             )}
 
-            {feed.error && feed.results.length === 0 ? (
-              <StateDisplay title={t('lists.loadError')} />
-            ) : (
-              <PaginatedMediaResults
-                results={feed.results}
-                loading={feed.loading}
-                loadingMore={feed.loadingMore}
-                hasMore={feed.hasMore}
-                onSelectItem={goToMedia}
-                onUpdateItem={feed.updateItem}
-                onLoadMore={feed.loadMore}
-              />
+            {lists !== null && lists.length > 0 && (
+              <>
+                {/* The sidebar is desktop-only; phones get a chip row instead. */}
+                {lists.length > 1 && (
+                  <div className="md:hidden">
+                    <QuickActionBar
+                      items={lists.map((list) => ({
+                        id: list.id,
+                        label: list.name,
+                        icon: 'view_list',
+                        selected: list.id === selected?.id,
+                        onClick: () => {
+                          setSearchParams({ list: list.id }, { replace: true });
+                        },
+                      }))}
+                    />
+                  </div>
+                )}
+
+                {feed.error && feed.results.length === 0 ? (
+                  <StateDisplay title={t('lists.loadError')} />
+                ) : (
+                  <PaginatedMediaResults
+                    results={feed.results}
+                    loading={feed.loading}
+                    loadingMore={feed.loadingMore}
+                    hasMore={feed.hasMore}
+                    onSelectItem={goToMedia}
+                    onUpdateItem={feed.updateItem}
+                    onLoadMore={feed.loadMore}
+                  />
+                )}
+              </>
             )}
-          </>
-        )}
+          </div>
+        </PageContainer>
       </div>
-    </PageContainer>
+    </div>
   );
 }
