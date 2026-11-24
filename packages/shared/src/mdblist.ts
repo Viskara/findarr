@@ -25,8 +25,6 @@ export interface MdblistList {
   id: string;
   url: string;
   name: string;
-  /** MDBList owner, without the leading @. */
-  username: string;
   itemCount: number;
   movieCount: number;
   showCount: number;

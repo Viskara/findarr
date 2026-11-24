@@ -53,7 +53,6 @@ function toPublic(list: StoredList): MdblistList {
     id: list.id,
     url: mdblistPublicUrl(list),
     name: list.name,
-    username: list.username,
     itemCount: list.items.length,
     movieCount: list.items.filter((item) => item.type === 'movie').length,
     showCount: list.items.filter((item) => item.type === 'tv').length,

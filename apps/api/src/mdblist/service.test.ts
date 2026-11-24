@@ -46,14 +46,13 @@ async function setup(details: TMDBService['details']) {
 }
 
 describe('mdblist overview data', () => {
-  it('reports the owner and the movie / show split', async () => {
+  it('reports the movie / show split', async () => {
     const { service } = await setup(vi.fn());
 
     await expect(service.listLists()).resolves.toMatchObject([
       {
         id: 'list-1',
         name: 'My List',
-        username: 'someone',
         url: 'https://mdblist.com/lists/someone/my-list',
         itemCount: 7,
         movieCount: 5,
