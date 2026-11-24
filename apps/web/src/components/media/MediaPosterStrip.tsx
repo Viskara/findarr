@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { tmdbImage } from '../../utils/tmdb';
 import { HorizontalRail } from '../ui/HorizontalRail';
+import { StatusBadge } from '../ui/StatusBadge';
 
 function keyOf(item: Media) {
   return `${item.type}_${item.tmdbId}`;
@@ -14,11 +15,15 @@ export function MediaPosterStrip({
   results,
   onSelectItem,
   ariaLabel,
+  showStatus = false,
+  emptyMessage,
 }: {
   loading: boolean;
   results: Media[];
   onSelectItem: (item: Media) => void;
   ariaLabel?: string;
+  showStatus?: boolean;
+  emptyMessage?: string;
 }) {
   const { t } = useTranslation();
   const railLabel = ariaLabel ?? t('media.newlyAvailable');
@@ -45,7 +50,7 @@ export function MediaPosterStrip({
   if (results.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-zinc-800 bg-zinc-900/35 px-5 py-8 text-sm text-zinc-400">
-        {t('media.noNewlyAvailable')}
+        {emptyMessage ?? t('media.noNewlyAvailable')}
       </div>
     );
   }
@@ -67,6 +72,11 @@ export function MediaPosterStrip({
           className="group w-32 shrink-0 text-left transition-transform duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 sm:w-36 md:w-40"
         >
           <div className="relative overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900 shadow-[0_14px_36px_rgba(0,0,0,0.22)] transition-all duration-300 group-hover:border-zinc-700 group-hover:shadow-[0_22px_56px_rgba(0,0,0,0.32)]">
+            {showStatus && isDefined(item.state?.record?.status) && (
+              <div className="absolute top-1.5 left-1.5 z-10">
+                <StatusBadge status={item.state.record.status} position="inline" />
+              </div>
+            )}
             {isDefined(item.posterPath) ? (
               <img
                 src={tmdbImage(item.posterPath, 'w342')}

@@ -48,7 +48,7 @@
   },
   "dashboard": {
     "welcomeBack": "Willkommen zurück, {{name}}",
-    "description": "Schau dir an, was gerade beliebt ist, stimme über Anfragen ab und entdecke, was gerade angesagt ist.",
+    "description": "Suche, öffne deine Listen und behalte im Blick, was du angefragt hast.",
     "hero": {
       "continueVoting": {
         "eyebrow": "Weiter abstimmen",
@@ -72,6 +72,11 @@
         "tryVotingAgain": "Abstimmung erneut versuchen",
         "openActivity": "Aktivität öffnen"
       }
+    },
+    "requestsInProgress": "Deine laufenden Anfragen",
+    "lists": {
+      "title": "Deine Listen",
+      "viewAll": "Alle anzeigen"
     }
   },
   "settings": {

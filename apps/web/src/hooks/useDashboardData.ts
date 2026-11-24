@@ -1,17 +1,27 @@
+import type { MdblistList } from '@findarr/shared/mdblist';
 import type { Media } from '@findarr/shared/media';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { interactionService, searchService } from '../services/api';
+import { interactionService, mdblistService, searchService } from '../services/api';
+import { useSession } from './useSession';
 
 export interface DashboardData {
   nextMedia: Media | undefined;
   availableResults: Media[];
+  requestedResults: Media[];
+  lists: MdblistList[];
+  loadingRequested: boolean;
   loadingHero: boolean;
   loadingAvailable: boolean;
   heroError: string | undefined;
 }
 
 export function useDashboardData(): DashboardData {
+  const { user } = useSession();
+  const userId = user?.id;
+  const [requestedResults, setRequestedResults] = useState<Media[]>([]);
+  const [lists, setLists] = useState<MdblistList[]>([]);
+  const [loadingRequested, setLoadingRequested] = useState(true);
   const [nextMedia, setNextMedia] = useState<Media | undefined>();
   const [availableResults, setAvailableResults] = useState<Media[]>([]);
   const [loadingHero, setLoadingHero] = useState(true);
@@ -25,6 +35,7 @@ export function useDashboardData(): DashboardData {
 
     setLoadingHero(true);
     setLoadingAvailable(true);
+    setLoadingRequested(true);
     setHeroError(undefined);
 
     const loadHero = async () => {
@@ -74,9 +85,47 @@ export function useDashboardData(): DashboardData {
       }
     };
 
+    // The user's own requests that are still on their way to the library.
+    const loadRequested = async () => {
+      try {
+        const result = await interactionService.listActivity({
+          page: 1,
+          action: 'liked',
+          statuses: ['requested', 'downloading', 'downloaded', 'warning'],
+          type: 'both',
+          ...(userId === undefined ? {} : { userId }),
+        });
+        if (requestId === requestIdRef.current) {
+          setRequestedResults(result.results);
+        }
+      } catch (err) {
+        console.error('Failed to load requests in progress:', err);
+        if (requestId === requestIdRef.current) {
+          setRequestedResults([]);
+        }
+      } finally {
+        if (requestId === requestIdRef.current) {
+          setLoadingRequested(false);
+        }
+      }
+    };
+
+    const loadLists = async () => {
+      try {
+        const loaded = await mdblistService.listLists();
+        if (requestId === requestIdRef.current) {
+          setLists(loaded);
+        }
+      } catch (err) {
+        console.error('Failed to load lists:', err);
+      }
+    };
+
     void loadHero();
     void loadAvailable();
-  }, []);
+    void loadRequested();
+    void loadLists();
+  }, [userId]);
 
   useEffect(() => {
     loadDashboard();
@@ -85,6 +134,9 @@ export function useDashboardData(): DashboardData {
   return {
     nextMedia,
     availableResults,
+    requestedResults,
+    lists,
+    loadingRequested,
     loadingHero,
     loadingAvailable,
     heroError,

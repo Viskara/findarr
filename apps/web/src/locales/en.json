@@ -48,7 +48,7 @@
   },
   "dashboard": {
     "welcomeBack": "Welcome back, {{name}}",
-    "description": "Check out what's popular, vote on requests, and discover what's rising.",
+    "description": "Search, jump into your lists, and keep an eye on what you have requested.",
     "hero": {
       "continueVoting": {
         "eyebrow": "Continue voting",
@@ -72,6 +72,11 @@
         "tryVotingAgain": "Try Voting Again",
         "openActivity": "Open Activity"
       }
+    },
+    "requestsInProgress": "Your requests in progress",
+    "lists": {
+      "title": "Your lists",
+      "viewAll": "View all"
     }
   },
   "settings": {
